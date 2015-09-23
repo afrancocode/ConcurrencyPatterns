@@ -12,7 +12,7 @@ namespace ConcurrencyPatterns.Presentation.Web.Infrastructure
 	public sealed class CookieSession : ISession
 	{
 		private Guid id = Guid.Empty;
-		private Guid owner = Guid.Empty;
+		private Guid ownerId = Guid.Empty;
 		private bool initialized;
 
 		public CookieSession()
@@ -20,21 +20,17 @@ namespace ConcurrencyPatterns.Presentation.Web.Infrastructure
 			initialized = false;
 		}
 
-		public Guid Id { get { Initialize(); return this.id; } }
+		public Guid Id { get { return this.id; } }
 
-		public Guid Owner
-		{
-			get { Initialize(); return this.owner; }
-			set { Initialize(); this.SetOwner(value); }
-		}
+		public Guid Owner { get { return this.ownerId; } }
 
-		private void Initialize()
+		public void Initialize(Guid owner)
 		{
 			if (this.initialized) return;
-			var cookie = GetCookie() ?? CreateCookie();
+			var cookie = GetCookie() ?? CreateCookie(owner);
 			Debug.Assert(cookie != null);
 			this.id = new Guid(cookie["Id"]);
-			this.owner = new Guid(cookie["Owner"]);
+			this.ownerId = new Guid(cookie["Owner"]);
 			this.initialized = true;
 		}
 
@@ -46,22 +42,23 @@ namespace ConcurrencyPatterns.Presentation.Web.Infrastructure
 			return null;
 		}
 
-		private HttpCookie CreateCookie()
+		private HttpCookie CreateCookie(Guid owner)
 		{
 			var cookie = new HttpCookie("SessionInfo");
 			cookie.Values.Add("Id", Guid.NewGuid().ToString());
-			cookie.Values.Add("Owner", owner.ToString()); // Initialize later
-			HttpContext.Current.Response.Cookies.Add(cookie);
+			cookie.Values.Add("Owner", owner.ToString());
+			cookie.Expires = DateTime.Now.AddHours(1); // Temporal date
+			HttpContext.Current.Response.AppendCookie(cookie);
 			return cookie;
 		}
 
 		private void SetOwner(Guid owner)
 		{
-			if (this.owner == Guid.Empty)
+			if (this.ownerId == Guid.Empty)
 			{
 				var cookie = HttpContext.Current.Response.Cookies["SessionInfo"];
 				cookie.Values.Set("Owner", owner.ToString());
-				this.owner = owner;
+				this.ownerId = owner;
 			}
 		}
 	}

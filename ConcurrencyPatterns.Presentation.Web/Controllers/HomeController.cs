@@ -11,6 +11,19 @@ using ConcurrencyPatterns.Model.Users;
 
 namespace ConcurrencyPatterns.Presentation.Web.Controllers
 {
+	public sealed class CookieFilterAttribute : ActionFilterAttribute
+	{
+		private static Guid userId = new Guid("5ed0e574-8093-4020-ab9e-039bb8e19853");
+
+		private IManagerContext ManagerContext { get { return ApplicationContextHolder.Instance.Context; } }
+
+		public override void OnActionExecuting(ActionExecutingContext filterContext)
+		{
+			ManagerContext.Session.Initialize(userId); // Dummy code just to initialize the cookie. This initialize code can be on the login with the real user id
+		}
+	}
+
+	[CookieFilter]
 	public class HomeController : Controller
 	{
 		private IUserRepository repo;

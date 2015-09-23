@@ -12,6 +12,7 @@ namespace ConcurrencyPatterns.Infrastructure.Session
 	public interface ISession
 	{
 		Guid Id { get; }
-		Guid Owner { get; set; }
+		Guid Owner { get; }
+		void Initialize(Guid owner);
 	}
 }
