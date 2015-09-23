@@ -63,8 +63,7 @@ namespace ConcurrencyPatterns.Repository.Sql.UnitOfWork
 
 		public void Commit()
 		{
-			var connection = Context.Data.Connection;
-			connection.Open();
+			var connection = Context.Data.Open();
 			Context.Data.Transaction = connection.BeginTransaction(IsolationLevel.ReadUncommitted);
 			try
 			{
@@ -80,11 +79,11 @@ namespace ConcurrencyPatterns.Repository.Sql.UnitOfWork
 			}
 			finally
 			{
-				connection.Close();
+				Context.Data.Close();
 			}
 		}
 
-		private void InsertNew() 
+		private void InsertNew()
 		{
 			foreach (var insertItem in this.add)
 			{

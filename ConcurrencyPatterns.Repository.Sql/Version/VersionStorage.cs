@@ -28,18 +28,15 @@ namespace ConcurrencyPatterns.Repository.Sql.Version
 		public Version Load(Guid id)
 		{
 			Version version = null;
-			var connection = Context.Data.Connection;
-			var open = (connection.State == ConnectionState.Open);
-			if (!open)
-				connection.Open();
+			var connection = Context.Data.Open();
 			try
 			{
-				using(var command = connection.CreateCommand())
+				using (var command = connection.CreateCommand())
 				{
 					command.CommandType = CommandType.Text;
 					command.CommandText = string.Format(LOAD_SQL, id.ToString());
 					var reader = command.ExecuteReader();
-					if(reader.Read())
+					if (reader.Read())
 					{
 						int value = int.Parse(reader["Value"].ToString());
 						string modifiedBy = reader["ModifiedBy"].ToString();
@@ -49,14 +46,13 @@ namespace ConcurrencyPatterns.Repository.Sql.Version
 					}
 				}
 			}
-			catch(DbException dbe)
+			catch (DbException dbe)
 			{
 				throw new ConcurrencyException("Unexpected sql error loading version: " + dbe.Message);
 			}
 			finally
 			{
-				if(!open)
-					connection.Close();
+				Context.Data.Close();
 			}
 
 			return version;
@@ -67,13 +63,10 @@ namespace ConcurrencyPatterns.Repository.Sql.Version
 			if (!version.IsNew)
 				throw new InvalidOperationException("Version object is not new!");
 
-			var connection = Context.Data.Connection;
-			var open = (connection.State == ConnectionState.Open);
-			if (!open)
-				connection.Open();
+			var connection = Context.Data.Open();
 			try
 			{
-				using(var command = connection.CreateCommand())
+				using (var command = connection.CreateCommand())
 				{
 					command.CommandType = CommandType.Text;
 					command.CommandText = string.Format(INSERT_SQL, version.Id.ToString(), version.Value, version.ModifiedBy, version.Modified.ToString());
@@ -82,14 +75,13 @@ namespace ConcurrencyPatterns.Repository.Sql.Version
 					Context.IdentityMap.Add(version.Id, version);
 				}
 			}
-			catch(DbException dbe)
+			catch (DbException dbe)
 			{
 				throw new Exception("Unexpected sql error inserting version: " + dbe.Message);
 			}
 			finally
 			{
-				if(!open)
-					connection.Close();
+				Context.Data.Close();
 			}
 		}
 
@@ -97,13 +89,10 @@ namespace ConcurrencyPatterns.Repository.Sql.Version
 		{
 			if (version.IsLocked)
 				throw new InvalidOperationException("Version object is already locked!");
-			var connection = Context.Data.Connection;
-			var open = (connection.State == ConnectionState.Open);
-			if (!open)
-				connection.Open();
+			var connection = Context.Data.Open();
 			try
 			{
-				using(var command = connection.CreateCommand())
+				using (var command = connection.CreateCommand())
 				{
 					command.CommandType = CommandType.Text;
 					command.CommandText = string.Format(UPDATE_SQL, (version.Value + 1), version.ModifiedBy, version.Modified.ToString(), version.Id, version.Value);
@@ -119,8 +108,7 @@ namespace ConcurrencyPatterns.Repository.Sql.Version
 			}
 			finally
 			{
-				if(!open)
-					connection.Close();
+				Context.Data.Close();
 			}
 		}
 
@@ -128,10 +116,7 @@ namespace ConcurrencyPatterns.Repository.Sql.Version
 		{
 			if (!version.IsNew || version.IsLocked)
 				throw new InvalidOperationException("Invalid Version object to delete!");
-			var connection = Context.Data.Connection;
-			var open = (connection.State == ConnectionState.Open);
-			if (!open)
-				connection.Open();
+			var connection = Context.Data.Open();
 			try
 			{
 				using (var command = connection.CreateCommand())
@@ -150,8 +135,7 @@ namespace ConcurrencyPatterns.Repository.Sql.Version
 			}
 			finally
 			{
-				if(!open)
-					connection.Close();
+				Context.Data.Close();
 			}
 		}
 	}

@@ -4,29 +4,22 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
-using System.Web;
-
+using System.Text;
+using System.Threading.Tasks;
 using ConcurrencyPatterns.Infrastructure.Db;
 
-namespace ConcurrencyPatterns.Presentation.Web.Infrastructure
+namespace ConcurrencyPatterns.Repository.Sql
 {
 	public sealed class DataConnection : IDataConnection
 	{
-		private static readonly string SQL_CONNECTION = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=D:\GitHub\ConcurrencyPatterns\ConcurrencyPatterns.Presentation.Web\App_Data\ConcurrencyData.mdf;Integrated Security=True";
-
 		private IDbTransaction transaction;
 		private IDbConnection connection;
+		private string connectionString;
+		private int openCount;
 
-		public DataConnection() { }
-
-		public IDbConnection Connection
+		public DataConnection(string connectionString)
 		{
-			get 
-			{
-				if (this.connection == null)
-					this.connection = new SqlConnection(SQL_CONNECTION);
-				return this.connection;
-			}
+			this.connectionString = connectionString;
 		}
 
 		public IDbTransaction Transaction
@@ -38,6 +31,20 @@ namespace ConcurrencyPatterns.Presentation.Web.Infrastructure
 					throw new InvalidOperationException("Transaction has value");
 				transaction = value;
 			}
+		}
+
+		public IDbConnection Open()
+		{
+			if (++this.openCount != 1) return this.connection;
+			this.connection = new SqlConnection(this.connectionString);
+			this.connection.Open();
+			return connection;
+		}
+
+		public void Close()
+		{
+			if (--this.openCount != 0) return;
+			this.connection.Close();
 		}
 	}
 }

@@ -10,7 +10,8 @@ namespace ConcurrencyPatterns.Infrastructure.Db
 {
 	public interface IDataConnection
 	{
-		IDbConnection Connection { get; }
 		IDbTransaction Transaction { get; set; }
+		IDbConnection Open();
+		void Close();
 	}
 }

@@ -117,7 +117,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\CookieSession.cs" />
-    <Compile Include="Infrastructure\DataConnection.cs" />
+    <Compile Include="Infrastructure\DataConnectionInfo.cs" />
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

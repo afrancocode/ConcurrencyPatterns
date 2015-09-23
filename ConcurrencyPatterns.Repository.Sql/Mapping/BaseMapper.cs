@@ -33,10 +33,7 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 			{
 				try
 				{
-					var connection = Context.Data.Connection;
-					var open = (connection.State == ConnectionState.Open);
-					if(!open)
-						connection.Open();
+					var connection = Context.Data.Open();
 					try
 					{
 						using (var command = connection.CreateCommand())
@@ -53,8 +50,7 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 					}
 					finally
 					{
-						if(!open)
-							connection.Close();
+						Context.Data.Close();
 					}
 				}
 				catch (DbException dbe)
@@ -67,10 +63,7 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 
 		public IEnumerable<EntityBase> FindAll()
 		{
-			var connection = Context.Data.Connection;
-			var open = (connection.State == ConnectionState.Open);
-			if (!open)
-				connection.Open();
+			var connection = Context.Data.Open();
 			try
 			{
 				using (var command = connection.CreateCommand())
@@ -89,8 +82,7 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 			}
 			finally
 			{
-				if(!open)
-					connection.Close();
+				Context.Data.Close();
 			}
 		}
 

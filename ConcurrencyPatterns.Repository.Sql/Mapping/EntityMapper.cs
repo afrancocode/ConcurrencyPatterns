@@ -24,7 +24,7 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 			var value = int.Parse(reader["vValue"].ToString());
 			var vModifiedBy = reader["vModifiedBy"].ToString();
 			var vModified = DateTime.Parse(reader["vModified"].ToString());
-			
+
 			var version = Version.Activate(versionId, value, vModifiedBy, vModified);
 
 			var modifiedBy = reader["ModifiedBy"].ToString();
@@ -39,13 +39,10 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 
 		protected sealed override void Insert(EntityBase entity)
 		{
-			var connection = Context.Data.Connection;
-			var open = (connection.State == ConnectionState.Open);
-			if (!open)
-				connection.Open();
+			var connection = Context.Data.Open();
 			try
 			{
-				using(var command = connection.CreateCommand())
+				using (var command = connection.CreateCommand())
 				{
 					command.CommandType = CommandType.Text;
 					command.CommandText = GetInsertSQL((T)entity);
@@ -54,14 +51,13 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 				}
 				OnInsert((T)entity);
 			}
-			catch(DbException dbe)
+			catch (DbException dbe)
 			{
 				throw new Exception(dbe.Message);
 			}
 			finally
 			{
-				if(!open)
-					connection.Close();
+				Context.Data.Close();
 			}
 		}
 
@@ -72,13 +68,10 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 
 		protected sealed override void Update(EntityBase entity)
 		{
-			var connection = Context.Data.Connection;
-			var open = (connection.State == ConnectionState.Open);
-			if (!open)
-				connection.Open();
+			var connection = Context.Data.Open();
 			try
 			{
-				using(var command = connection.CreateCommand())
+				using (var command = connection.CreateCommand())
 				{
 					command.CommandType = CommandType.Text;
 					command.CommandText = GetUpdateSQL((T)entity);
@@ -89,31 +82,27 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 				}
 				OnUpdate((T)entity);
 			}
-			catch(DbException dbe)
+			catch (DbException dbe)
 			{
 				throw new Exception(dbe.Message);
 			}
 			finally
 			{
-				if(!open)
-					connection.Close();
+				Context.Data.Close();
 			}
 		}
 
-		protected virtual void OnUpdate(T entity) 
+		protected virtual void OnUpdate(T entity)
 		{
 			entity.Version.Increment();
 		}
 
 		protected sealed override void Delete(EntityBase entity)
 		{
-			var connection = Context.Data.Connection;
-			var open = (connection.State == ConnectionState.Open);
-			if (!open)
-				connection.Open();
+			var connection = Context.Data.Open();
 			try
 			{
-				using(var command = connection.CreateCommand())
+				using (var command = connection.CreateCommand())
 				{
 					command.CommandType = CommandType.Text;
 					command.CommandText = GetDeleteSQL((T)entity);
@@ -126,14 +115,13 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 			{
 				throw new Exception(dbe.Message);
 			}
-			finally 
+			finally
 			{
-				if(!open)
-					connection.Close();
+				Context.Data.Close();
 			}
 		}
 
-		protected virtual void OnDelete(T entity) 
+		protected virtual void OnDelete(T entity)
 		{
 			entity.Version.Delete();
 		}
