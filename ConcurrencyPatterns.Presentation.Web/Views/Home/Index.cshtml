@@ -1,0 +1,16 @@
+﻿@model IEnumerable<ConcurrencyPatterns.Model.Users.User>
+@{
+	ViewBag.Title = "Login";
+}
+
+<h2>Select user</h2>
+
+@foreach (var user in Model)
+{
+	<ul>
+		<li>
+			@Html.ActionLink(user.Name, "LoginUser", new { id = user.Id })
+		</li>
+	</ul>
+}
+

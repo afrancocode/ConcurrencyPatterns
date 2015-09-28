@@ -8,19 +8,13 @@ using ConcurrencyPatterns.Infrastructure.Context;
 using ConcurrencyPatterns.Infrastructure.Session;
 using ConcurrencyPatterns.Model.Products;
 using ConcurrencyPatterns.Model.Users;
+using ConcurrencyPatterns.Presentation.Web.Infrastructure;
 
 namespace ConcurrencyPatterns.Presentation.Web.Controllers
 {
 	public sealed class CookieFilterAttribute : ActionFilterAttribute
 	{
-		private static Guid userId = new Guid("5ed0e574-8093-4020-ab9e-039bb8e19853");
-
 		private IManagerContext ManagerContext { get { return ApplicationContextHolder.Instance.Context; } }
-
-		public override void OnActionExecuting(ActionExecutingContext filterContext)
-		{
-			ManagerContext.Session.Initialize(userId); // Dummy code just to initialize the cookie. This initialize code can be on the login with the real user id
-		}
 	}
 
 	[CookieFilter]
@@ -28,6 +22,7 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 	{
 		private IUserRepository repo;
 		private IProductRepository products;
+		private CookieSession cookie;
 
 		protected IManagerContext ManagerContext { get { return ApplicationContextHolder.Instance.Context; } }
 
@@ -35,38 +30,58 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 		{
 			this.repo = repo;
 			this.products = products;
+			this.cookie = new CookieSession();
 		}
 
-		public string GetUserInfo()
+		public ActionResult Index()
 		{
-			var id = new Guid("5ed0e574-8093-4020-ab9e-039bb8e19853");
-			var entity = repo.FindBy(id);
-			return string.Format("Id = '{0}' Name = {1}", entity.Id, entity.Name);
+			var actualCookie = cookie.GetCookie();
+			if (actualCookie != null)
+			{
+				var userId = new Guid(actualCookie["Owner"]);
+				var user = repo.FindBy(userId);
+				ViewBag.UserName = user.Name;
+				return View("Home");
+			}
+			return View(repo.FindAll().ToList());
 		}
 
-		public string CreateProduct()
+		public ActionResult Home()
 		{
-			var product = Product.Create("My Product 02", "Product description 02", 100, "sysadmin");
-			products.Add(product);
-			this.ManagerContext.UnitOfWork.Commit();
-			return product.Id.ToString();
+			return View();
 		}
 
-		public string GetProduct()
+		public ActionResult LoginUser(Guid id)
 		{
-			var id = new Guid("5ecddc56-3c95-4249-af07-15d97e5e1202");
-			var product = products.FindBy(id);
-			return string.Format("Id = '{0}' Name = '{1}' Description = '{2}'", product.Id, product.Name, product.Description);
+			var user = repo.FindBy(id);
+			if (user == null)
+			{
+				//TODO: Define error that will be displayed
+				return HttpNotFound();
+			}
+			return LoginUser(user);
 		}
 
-		public string EditProduct()
+		public ActionResult Logout()
 		{
-			var id = new Guid("5ecddc56-3c95-4249-af07-15d97e5e1202");
-			var product = products.FindBy(id);
-			product.Name = "New Name";
-			products.Save(product);
-			this.ManagerContext.UnitOfWork.Commit();
-			return "Saved";
+			cookie.DeleteCookie();
+			return RedirectToAction("Index", "Home");
+		}
+
+		public ActionResult Store()
+		{
+			return RedirectToRoute(new { controller = "Store", action = "index" });
+		}
+
+		private ActionResult LoginUser(User user)
+		{
+			if (ModelState.IsValid)
+			{
+				Debug.Assert(cookie != null);
+				cookie.Initialize(user.Id);
+			}
+			ViewBag.Username = user.Name;
+			return View("Home");
 		}
 	}
 }

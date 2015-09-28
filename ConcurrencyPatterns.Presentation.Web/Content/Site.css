@@ -1,0 +1,82 @@
+﻿body {
+}
+body {
+	font: "Trebuchet MS", Verdana, sans-serif;
+	color: black;
+}
+
+h1 {
+	border-bottom: 3px solid #151a1f;
+	font: Georgia, serif;
+	color: #6a869d;
+}
+
+#main {
+	padding: 20px;
+	background-color: #ffffff;
+	border-radius: 0 4px 4px 4px;
+}
+
+a {
+	color: #034af3;
+}
+
+/* Menu styles ------------*/
+ul#menu {
+	padding: 0px;
+	position: relative;
+	margin: 0;
+}
+
+ul#menu li {
+	display: inline;
+}
+
+ul#menu li a {
+	background-color: #e8eef4;
+	padding: 10px 20px;
+	text-decoration: none;
+	line-height: 2.8em;
+	border-radius: 4px 4px 0 0;
+}
+
+ul#menu li a:hover {
+	background-color: #ffffff;
+}
+
+/* Forms Styles--------------------*/
+fieldset {
+	padding-left: 12px;
+}
+
+fieldset label {
+	display: block;
+	padding: 4px;
+}
+
+input[type=" text"], input[type="password"] {
+	width: 300px;
+}
+
+input[type="submit"] {
+	padding: 4px;
+}
+
+/* Data Styles -------------------*/
+table {
+	background-color: #ffffff;
+	border: 1px solid #c3c3c3;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+table th {
+	background-color: #e8eef4;
+	border: 1px solid #c3c3c3;
+	padding: 3px;
+}
+
+table td {
+	border: 1px solid #c3c3c3;
+	padding: 3px;
+}

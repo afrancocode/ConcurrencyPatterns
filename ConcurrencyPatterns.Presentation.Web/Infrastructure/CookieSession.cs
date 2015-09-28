@@ -27,14 +27,29 @@ namespace ConcurrencyPatterns.Presentation.Web.Infrastructure
 		public void Initialize(Guid owner)
 		{
 			if (this.initialized) return;
-			var cookie = GetCookie() ?? CreateCookie(owner);
+			var cookie = CoreGetCookie() ?? CreateCookie(owner);
 			Debug.Assert(cookie != null);
 			this.id = new Guid(cookie["Id"]);
 			this.ownerId = new Guid(cookie["Owner"]);
 			this.initialized = true;
 		}
 
-		private HttpCookie GetCookie()
+		public void DeleteCookie()
+		{
+			var cookie = CoreGetCookie();
+			if (cookie != null)
+			{
+				cookie.Expires = DateTime.Now.AddDays(-1);
+				HttpContext.Current.Response.Cookies.Add(cookie);
+			}
+		}
+
+		public HttpCookie GetCookie()
+		{
+			return CoreGetCookie();
+		}
+
+		private HttpCookie CoreGetCookie()
 		{
 			var cookies = HttpContext.Current.Request.Cookies;
 			if (cookies.AllKeys.Contains("SessionInfo"))
