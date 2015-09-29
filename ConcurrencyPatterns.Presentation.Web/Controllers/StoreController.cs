@@ -7,7 +7,8 @@ using ConcurrencyPatterns.Model.Products;
 
 namespace ConcurrencyPatterns.Presentation.Web.Controllers
 {
-	public class StoreController : Controller
+	[CookieFilter]
+	public class StoreController : BaseController
 	{
 		private IProductRepository products;
 

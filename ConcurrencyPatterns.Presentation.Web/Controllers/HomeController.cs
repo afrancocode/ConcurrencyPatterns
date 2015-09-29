@@ -12,19 +12,11 @@ using ConcurrencyPatterns.Presentation.Web.Infrastructure;
 
 namespace ConcurrencyPatterns.Presentation.Web.Controllers
 {
-	public sealed class CookieFilterAttribute : ActionFilterAttribute
-	{
-		private IManagerContext ManagerContext { get { return ApplicationContextHolder.Instance.Context; } }
-	}
-
-	[CookieFilter]
 	public class HomeController : Controller
 	{
 		private IUserRepository repo;
 		private IProductRepository products;
 		private CookieSession cookie;
-
-		protected IManagerContext ManagerContext { get { return ApplicationContextHolder.Instance.Context; } }
 
 		public HomeController(IUserRepository repo, IProductRepository products)
 		{
@@ -70,7 +62,7 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 
 		public ActionResult Store()
 		{
-			return RedirectToRoute(new { controller = "Store", action = "index" });
+			return RedirectToAction("Index", "Store");
 		}
 
 		private ActionResult LoginUser(User user)
