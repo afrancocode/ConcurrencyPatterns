@@ -9,7 +9,7 @@ using ConcurrencyPatterns.Infrastructure.Domain;
 
 namespace ConcurrencyPatterns.Model.Core
 {
-	public abstract class Entity : EntityBase, IAggregateRoot
+	public abstract class Entity : EntityBase
 	{
 		private DateTime modified;
 		private string modifiedBy;

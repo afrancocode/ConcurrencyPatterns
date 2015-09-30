@@ -15,6 +15,7 @@ namespace ConcurrencyPatterns.Presentation.Web.Infrastructure
 	using ConcurrencyPatterns.Infrastructure.Session;
 	using ConcurrencyPatterns.Infrastructure.UnitOfWork;
 	using ConcurrencyPatterns.Model.Core;
+	using ConcurrencyPatterns.Model.Customers;
 	using ConcurrencyPatterns.Model.Products;
 	using ConcurrencyPatterns.Model.Users;
 	using ConcurrencyPatterns.Repository.Sql;
@@ -49,6 +50,7 @@ namespace ConcurrencyPatterns.Presentation.Web.Infrastructure
 			kernel.Bind<IDataConnection>().To<DataConnection>().InRequestScope().WithConstructorArgument("connectionString", DataConnectionInfo.SQL_CONNECTION);
 			kernel.Bind<IUserRepository>().To<UserRepository>().InRequestScope();
 			kernel.Bind<IProductRepository>().To<ProductRepository>().InRequestScope();
+			kernel.Bind<ICustomerRepository>().To<CustomerRepository>().InRequestScope();
 			kernel.Bind<IManagerContext>().To<HttpManagerContext>().InRequestScope();
 			kernel.Bind<IVersionStorage>().To<VersionStorage>().InRequestScope();
 			kernel.Bind<IUnitOfWork>().To<UnitOfWork>().InRequestScope();

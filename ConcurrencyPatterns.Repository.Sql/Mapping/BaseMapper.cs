@@ -52,6 +52,7 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 					{
 						Context.Data.Close();
 					}
+					OnLoad(id, entity);
 				}
 				catch (DbException dbe)
 				{
@@ -60,6 +61,8 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 			}
 			return entity;
 		}
+
+		protected virtual void OnLoad(Guid id, EntityBase entity) { }
 
 		public IEnumerable<EntityBase> FindAll()
 		{

@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ConcurrencyPatterns.Infrastructure.Domain;
 using ConcurrencyPatterns.Model.Core;
 
 namespace ConcurrencyPatterns.Model.Products
 {
 	using Version = ConcurrencyPatterns.Model.Core.Version;
 
-	public sealed class Product : Entity
+	public sealed class Product : Entity, IAggregateRoot
 	{
 		public static Product Create(string name, string description, int stock, string modifiedBy)
 		{

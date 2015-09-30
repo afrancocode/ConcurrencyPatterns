@@ -39,6 +39,7 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 
 		protected sealed override void Insert(EntityBase entity)
 		{
+			((T)entity).Version.Insert();
 			var connection = Context.Data.Open();
 			try
 			{
@@ -61,13 +62,11 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 			}
 		}
 
-		protected virtual void OnInsert(T entity)
-		{
-			entity.Version.Insert();
-		}
+		protected virtual void OnInsert(T entity) { }
 
 		protected sealed override void Update(EntityBase entity)
 		{
+			((T)entity).Version.Increment();
 			var connection = Context.Data.Open();
 			try
 			{
@@ -92,16 +91,15 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 			}
 		}
 
-		protected virtual void OnUpdate(T entity)
-		{
-			entity.Version.Increment();
-		}
+		protected virtual void OnUpdate(T entity) { }
 
 		protected sealed override void Delete(EntityBase entity)
 		{
+			((T)entity).Version.Delete();
 			var connection = Context.Data.Open();
 			try
 			{
+				OnDelete((T)entity);
 				using (var command = connection.CreateCommand())
 				{
 					command.CommandType = CommandType.Text;
@@ -109,7 +107,6 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 					command.Transaction = Context.Data.Transaction;
 					command.ExecuteNonQuery();
 				}
-				OnDelete((T)entity);
 			}
 			catch (DbException dbe)
 			{
@@ -121,10 +118,7 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 			}
 		}
 
-		protected virtual void OnDelete(T entity)
-		{
-			entity.Version.Delete();
-		}
+		protected virtual void OnDelete(T entity) { }
 
 		protected void ThrowConcurrencyException(T entity)
 		{

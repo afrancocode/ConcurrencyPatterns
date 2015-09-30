@@ -44,6 +44,9 @@
     <Compile Include="Core\IEntityRepository.cs" />
     <Compile Include="Core\IVersionStorage.cs" />
     <Compile Include="Core\Version.cs" />
+    <Compile Include="Customers\Address.cs" />
+    <Compile Include="Customers\Customer.cs" />
+    <Compile Include="Customers\ICustomerRepository.cs" />
     <Compile Include="Products\IProductRepository.cs" />
     <Compile Include="Products\Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
