@@ -71,6 +71,9 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 
 		public void Insert(Entity entity)
 		{
+			if (!entity.IsNew)
+				throw new InvalidOperationException("Cannot Insert an Existing Entity");
+
 			var connection = Context.Data.Open();
 			try
 			{
@@ -96,6 +99,11 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 
 		public void Update(Entity entity)
 		{
+			if (entity.IsNew)
+				throw new InvalidOperationException("Cannot Update a New Entity");
+
+			if (!entity.IsDirty) return;
+
 			var connection = Context.Data.Open();
 			try
 			{
@@ -123,6 +131,9 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 
 		public void Delete(Entity entity)
 		{
+			if (entity.IsNew)
+				throw new InvalidOperationException("Cannot Delete a New Entity");
+
 			var connection = Context.Data.Open();
 			try
 			{

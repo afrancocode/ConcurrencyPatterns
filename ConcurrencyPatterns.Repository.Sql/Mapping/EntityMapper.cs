@@ -39,17 +39,21 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 
 		protected sealed override void Insert(EntityBase entity)
 		{
+			var updateEntity = (T)entity;
+			if (!updateEntity.IsNew)
+				throw new InvalidOperationException("Cannot Insert an Existing Entity");
+
 			var connection = Context.Data.Open();
 			try
 			{
 				using (var command = connection.CreateCommand())
 				{
 					command.CommandType = CommandType.Text;
-					command.CommandText = GetInsertSQL((T)entity);
+					command.CommandText = GetInsertSQL(updateEntity);
 					command.Transaction = Context.Data.Transaction;
 					command.ExecuteNonQuery();
 				}
-				OnInsert((T)entity);
+				OnInsert(updateEntity);
 			}
 			catch (DbException dbe)
 			{
@@ -65,19 +69,26 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 
 		protected sealed override void Update(EntityBase entity)
 		{
+			var updateEntity = (T)entity;
+			if (updateEntity.IsNew)
+				throw new InvalidOperationException("Cannot Update a New Entity");
+
 			var connection = Context.Data.Open();
 			try
 			{
-				using (var command = connection.CreateCommand())
+				if (updateEntity.IsDirty)
 				{
-					command.CommandType = CommandType.Text;
-					command.CommandText = GetUpdateSQL((T)entity);
-					command.Transaction = Context.Data.Transaction;
-					int rows = command.ExecuteNonQuery();
-					if (rows == 0)
-						ThrowConcurrencyException((T)entity);
+					using (var command = connection.CreateCommand())
+					{
+						command.CommandType = CommandType.Text;
+						command.CommandText = GetUpdateSQL(updateEntity);
+						command.Transaction = Context.Data.Transaction;
+						int rows = command.ExecuteNonQuery();
+						if (rows == 0)
+							ThrowConcurrencyException(updateEntity);
+					}
 				}
-				OnUpdate((T)entity);
+				OnUpdate(updateEntity);
 			}
 			catch (DbException dbe)
 			{
@@ -93,14 +104,18 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 
 		protected sealed override void Delete(EntityBase entity)
 		{
+			var updateEntity = (T)entity;
+			if (updateEntity.IsNew)
+				throw new InvalidOperationException("Cannot Delete a New Entity");
+
 			var connection = Context.Data.Open();
 			try
 			{
-				OnDelete((T)entity);
+				OnDelete(updateEntity);
 				using (var command = connection.CreateCommand())
 				{
 					command.CommandType = CommandType.Text;
-					command.CommandText = GetDeleteSQL((T)entity);
+					command.CommandText = GetDeleteSQL(updateEntity);
 					command.Transaction = Context.Data.Transaction;
 					command.ExecuteNonQuery();
 				}

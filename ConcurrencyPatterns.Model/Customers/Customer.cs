@@ -18,6 +18,7 @@ namespace ConcurrencyPatterns.Model.Customers
 		{
 			var customer = new Customer(Guid.NewGuid(), name);
 			customer.SetSystemFields(Version.Create(createdBy), DateTime.UtcNow, createdBy);
+			customer.isNew = true;
 			return customer;
 		}
 
@@ -41,7 +42,11 @@ namespace ConcurrencyPatterns.Model.Customers
 		public string Name
 		{
 			get { return this.name; }
-			set { this.name = value; }
+			set
+			{
+				this.name = value;
+				SetDirty();
+			}
 		}
 
 		public IEnumerable<Address> GetAddresses()

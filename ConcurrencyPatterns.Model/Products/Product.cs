@@ -18,6 +18,7 @@ namespace ConcurrencyPatterns.Model.Products
 		{
 			var product = new Product(Guid.NewGuid(), name, description, stock);
 			product.SetSystemFields(Version.Create(modifiedBy), DateTime.UtcNow, modifiedBy);
+			product.isNew = true;
 			return product;
 		}
 
@@ -41,19 +42,31 @@ namespace ConcurrencyPatterns.Model.Products
 		public string Name
 		{
 			get { return this.name; }
-			set { this.name = value; }
+			set
+			{
+				this.name = value;
+				SetDirty();
+			}
 		}
 
 		public string Description
 		{
 			get { return this.description; }
-			set { this.description = value; }
+			set
+			{
+				this.description = value;
+				SetDirty();
+			}
 		}
 
 		public int Stock
 		{
 			get { return this.stock; }
-			set { this.stock = value; }
+			set
+			{
+				this.stock = value;
+				SetDirty();
+			}
 		}
 	}
 }

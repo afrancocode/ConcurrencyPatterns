@@ -14,6 +14,8 @@ namespace ConcurrencyPatterns.Model.Core
 		private DateTime modified;
 		private string modifiedBy;
 		private Version version;
+		protected bool isNew;
+		private bool isDirty;
 
 		protected Entity(Guid id)
 		{
@@ -24,11 +26,20 @@ namespace ConcurrencyPatterns.Model.Core
 		public DateTime Modified { get { return this.modified; } }
 		public string ModifiedBy { get { return this.modifiedBy; } }
 
+		public bool IsNew { get { return this.isNew; } }
+		public bool IsDirty { get { return this.isDirty && !this.isNew; } }
+
 		public void SetSystemFields(Version version, DateTime modified, string modifiedBy)
 		{
 			this.version = version;
 			this.modified = modified;
 			this.modifiedBy = modifiedBy;
+		}
+
+		protected void SetDirty()
+		{
+			if (this.isDirty || this.isNew) return;
+			this.isDirty = true;
 		}
 	}
 }

@@ -30,8 +30,6 @@ namespace ConcurrencyPatterns.Model.Customers
 		private string line1;
 		private string line2;
 		private string phone;
-		private bool isDirty;
-		private bool isNew;
 
 		private Address(Guid id, Customer customer, string line1, string line2, string phone)
 			: base(id)
@@ -72,16 +70,6 @@ namespace ConcurrencyPatterns.Model.Customers
 				this.phone = value;
 				SetDirty();
 			}
-		}
-
-		internal bool IsDirty { get { return this.isDirty; } }
-
-		internal bool IsNew { get { return this.isNew; } }
-
-		private void SetDirty()
-		{
-			if (IsDirty) return;
-			this.isDirty = true;
 		}
 	}
 }
