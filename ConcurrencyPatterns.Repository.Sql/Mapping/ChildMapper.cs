@@ -12,7 +12,15 @@ using ConcurrencyPatterns.Model.Core;
 
 namespace ConcurrencyPatterns.Repository.Sql.Mapping
 {
-	public abstract class ChildMapper
+	public interface IChildMapper
+	{
+		void Load(Entity parent);
+		void Insert(Entity entity);
+		void Update(Entity entity);
+		void Delete(Entity entity);
+	}
+
+	public abstract class ChildMapper : IChildMapper
 	{
 		private static readonly string LOAD_SQL = "SELECT * FROM {0} WHERE ParentId = '{1}'";
 
@@ -63,7 +71,6 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 
 		public void Insert(Entity entity)
 		{
-			entity.Version.Increment();
 			var connection = Context.Data.Open();
 			try
 			{
@@ -89,7 +96,6 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 
 		public void Update(Entity entity)
 		{
-			entity.Version.Increment();
 			var connection = Context.Data.Open();
 			try
 			{
@@ -117,7 +123,6 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 
 		public void Delete(Entity entity)
 		{
-			entity.Version.Increment();
 			var connection = Context.Data.Open();
 			try
 			{

@@ -27,6 +27,7 @@ namespace ConcurrencyPatterns.Model.Customers
 		}
 
 		private string name;
+		private AddressModifications modifications;
 		private IList<Address> addresses;
 
 		private Customer(Guid id, string name)
@@ -34,6 +35,7 @@ namespace ConcurrencyPatterns.Model.Customers
 		{
 			this.name = name;
 			this.addresses = new List<Address>();
+			this.modifications = new AddressModifications(GetAddresses);
 		}
 
 		public string Name
@@ -51,6 +53,7 @@ namespace ConcurrencyPatterns.Model.Customers
 		{
 			var address = Address.Create(this, this.Version, line1, line2, phone, createdBy);
 			this.addresses.Add(address);
+			this.modifications.Insert(address);
 			return address;
 		}
 
@@ -64,6 +67,49 @@ namespace ConcurrencyPatterns.Model.Customers
 		public void RemoveAddress(Address address)
 		{
 			this.addresses.Remove(address);
+			this.modifications.Remove(address);
 		}
+
+		public AddressModifications GetAddressModifications()
+		{
+			return this.modifications;
+		}
+	}
+
+	public sealed class AddressModifications
+	{
+		private IList<Address> toRemove = new List<Address>();
+		private IList<Address> toInsert = new List<Address>();
+		private Func<IEnumerable<Address>> addresses;
+
+		internal AddressModifications(Func<IEnumerable<Address>> addresses)
+		{
+			this.addresses = addresses;
+		}
+
+		internal void Remove(Address address)
+		{
+			if (address.IsNew) return;
+			this.toRemove.Add(address);
+		}
+
+		internal void Insert(Address address)
+		{
+			if (!address.IsNew) return;
+			this.toInsert.Add(address);
+		}
+
+		public IEnumerable<Address> GetUpdates()
+		{
+			foreach (var address in addresses())
+			{
+				if (!address.IsNew && address.IsDirty)
+					yield return address;
+			}
+		}
+
+		public IEnumerable<Address> GetDeletes() { return this.toRemove; }
+
+		public IEnumerable<Address> GetInserts() { return this.toInsert; }
 	}
 }

@@ -46,6 +46,7 @@
     <Compile Include="Mapping\CustomerAddressesMapper.cs" />
     <Compile Include="Mapping\CustomerMapper.cs" />
     <Compile Include="Mapping\EntityMapper.cs" />
+    <Compile Include="Mapping\OptimisticLockingMapper.cs" />
     <Compile Include="Mapping\ProductMapper.cs" />
     <Compile Include="Mapping\UserMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

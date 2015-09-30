@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using ConcurrencyPatterns.Infrastructure.Data;
 using ConcurrencyPatterns.Infrastructure.Domain;
 using ConcurrencyPatterns.Model.Core;
 using ConcurrencyPatterns.Model.Customers;
@@ -20,11 +20,16 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 		private static readonly string UPDATE_SQL = "UPDATE Customers SET Name = '{0}', ModifiedBy = '{1}', Modified = '{2}' WHERE Id = '{3}' AND VersionId = '{4}'";
 		private static readonly string DELETE_SQL = "DELETE FROM Customers WHERE Id = '{0}' AND VersionId = '{1}'";
 
-		private CustomerAddressesMapper addresses;
-
-		public CustomerMapper()
+		internal static IMapper CreateMapper()
 		{
-			addresses = new CustomerAddressesMapper();
+			return new OptimisticLockingMapper(new CustomerMapper());
+		}
+
+		private IChildMapper addresses;
+
+		private CustomerMapper()
+		{
+			addresses = CustomerAddressesMapper.CreateMapper();
 		}
 
 		protected override string Table { get { return "Customers"; } }
@@ -42,23 +47,27 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 		protected override void OnInsert(Customer entity)
 		{
 			foreach(var address in entity.GetAddresses())
-			{
 				addresses.Insert(address);
-			}
 		}
 
 		protected override void OnUpdate(Customer entity)
 		{
-			OnDelete(entity);
-			OnInsert(entity);
+			var modifications = entity.GetAddressModifications();
+
+			foreach (var address in modifications.GetInserts())
+				addresses.Insert(address);
+
+			foreach (var address in modifications.GetDeletes())
+				addresses.Delete(address);
+
+			foreach (var address in modifications.GetUpdates())
+				addresses.Update(address);
 		}
 
 		protected override void OnDelete(Customer entity)
 		{
 			foreach(var address in entity.GetAddresses())
-			{
 				addresses.Delete(address);
-			}
 		}
 
 		protected override string GetLoadSQL(Guid id)

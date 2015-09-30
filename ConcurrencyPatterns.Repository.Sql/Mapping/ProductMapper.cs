@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ConcurrencyPatterns.Infrastructure.Data;
 using ConcurrencyPatterns.Infrastructure.Domain;
 using ConcurrencyPatterns.Model.Products;
 
@@ -18,6 +19,13 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 		private static readonly string INSERT_SQL = "INSERT INTO Products VALUES ('{0}', '{1}', '{2}', {3}, '{4}', '{5}', '{6}')";
 		private static readonly string UPDATE_SQL = "UPDATE Products SET Name = '{0}', Description = '{1}', Stock = {2}, ModifiedBy = '{3}', Modified = '{4}' WHERE Id = '{5}' AND VersionId = '{6}'";
 		private static readonly string DELETE_SQL = "DELETE FROM Products WHERE Id = '{0}' AND VersionId='{1}'";
+
+		internal static IMapper CreateMapper()
+		{
+			return new OptimisticLockingMapper(new ProductMapper());
+		}
+
+		private ProductMapper() { }
 
 		protected override string Table { get { return "Products"; } }
 

@@ -15,7 +15,7 @@ namespace ConcurrencyPatterns.Repository.Sql.Repositories
 	{
 		protected override IMapper CreateMapper()
 		{
-			return new ProductMapper();
+			return ProductMapper.CreateMapper();
 		}
 	}
 }

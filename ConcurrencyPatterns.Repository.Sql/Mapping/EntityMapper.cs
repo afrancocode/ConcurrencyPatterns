@@ -39,7 +39,6 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 
 		protected sealed override void Insert(EntityBase entity)
 		{
-			((T)entity).Version.Insert();
 			var connection = Context.Data.Open();
 			try
 			{
@@ -66,7 +65,6 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 
 		protected sealed override void Update(EntityBase entity)
 		{
-			((T)entity).Version.Increment();
 			var connection = Context.Data.Open();
 			try
 			{
@@ -95,7 +93,6 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 
 		protected sealed override void Delete(EntityBase entity)
 		{
-			((T)entity).Version.Delete();
 			var connection = Context.Data.Open();
 			try
 			{

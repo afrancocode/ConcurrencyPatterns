@@ -17,6 +17,13 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 		public static readonly string UPDATE_SQL = "UPDATE CustomerAddresses SET Line1 = '{0}', Line2 = '{1}', Phone = '{2}', ModifiedBy = '{3}', Modified = '{4}' WHERE Id = '{5}'";
 		public static readonly string DELETE_SQL = "DELETE FROM CustomerAddresses WHERE Id = '{0}'";
 
+		internal static IChildMapper CreateMapper()
+		{
+			return new OptimisticLockingChildMapper(new CustomerAddressesMapper());
+		}
+
+		private CustomerAddressesMapper() { }
+
 		protected override string Table
 		{
 			get { return "CustomerAddresses"; }
