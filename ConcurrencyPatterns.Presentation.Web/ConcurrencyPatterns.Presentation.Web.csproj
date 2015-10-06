@@ -130,6 +130,9 @@
     <Compile Include="Infrastructure\CookieSession.cs" />
     <Compile Include="Infrastructure\DataConnectionInfo.cs" />
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
+    <Compile Include="Infrastructure\LoginManager.cs" />
+    <Compile Include="Models\ProductViewModel.cs" />
+    <Compile Include="Models\VersionViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -143,6 +146,8 @@
     <Content Include="Views\Store\Index.cshtml" />
     <Content Include="Views\Store\Details.cshtml" />
     <Content Include="Views\Store\Edit.cshtml" />
+    <Content Include="Views\Store\Create.cshtml" />
+    <Content Include="Views\Store\Delete.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -165,7 +170,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\StoreManager\" />
   </ItemGroup>

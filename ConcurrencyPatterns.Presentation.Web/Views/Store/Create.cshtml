@@ -1,19 +1,20 @@
 ﻿@model ConcurrencyPatterns.Presentation.Web.Models.ProductViewModel
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Create";
 }
 
-<h2>Edit</h2>
+<h2>Create Product</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
-    <div>
+    <div >
         <h4>Product</h4>
         <hr />
         @Html.ValidationSummary(true)
+
         <div>
             @Html.LabelFor(model => model.Name)
             <div>
@@ -37,13 +38,10 @@
                 @Html.ValidationMessageFor(model => model.Stock)
             </div>
         </div>
-        @Html.HiddenFor(model => model.Version.Id)
-        @Html.HiddenFor(model => model.Version.Value)
-        @Html.HiddenFor(model => model.Version.ModifiedBy)
-        @Html.HiddenFor(model => model.Version.Modified)
+
         <div>
             <div>
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Create" />
             </div>
         </div>
     </div>

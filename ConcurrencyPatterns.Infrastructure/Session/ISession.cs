@@ -13,6 +13,10 @@ namespace ConcurrencyPatterns.Infrastructure.Session
 	{
 		Guid Id { get; }
 		Guid Owner { get; }
-		void Initialize(Guid owner);
+		string OwnerName { get; }
+		bool IsLoggedIn { get; }
+		void Initialize();
+		void InitSession(Guid owner, string ownerName);
+		void EndSession();
 	}
 }

@@ -11,6 +11,13 @@ h1 {
 	color: #6a869d;
 }
 
+a#title{
+	border-bottom: 3px solid #151a1f;
+	font: Georgia, serif;
+	color: #6a869d;
+	text-decoration: none;
+}
+
 #main {
 	padding: 20px;
 	background-color: #ffffff;

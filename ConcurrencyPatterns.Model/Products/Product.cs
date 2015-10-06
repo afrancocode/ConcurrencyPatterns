@@ -22,9 +22,11 @@ namespace ConcurrencyPatterns.Model.Products
 			return product;
 		}
 
-		public static Product Activate(Guid id, string name, string description, int stock)
+		public static Product Activate(Guid id, string name, string description, int stock, bool update = false)
 		{
-			return new Product(id, name, description, stock);
+			var product = new Product(id, name, description, stock);
+			if (update) product.SetDirty();
+			return product;
 		}
 
 		private string name;

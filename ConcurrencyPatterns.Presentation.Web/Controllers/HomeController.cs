@@ -16,23 +16,21 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 	{
 		private IUserRepository repo;
 		private IProductRepository products;
-		private CookieSession cookie;
+		private LoginManager login;
+		private IManagerContext ManagerContext { get { return ApplicationContextHolder.Instance.Context; } }
 
 		public HomeController(IUserRepository repo, IProductRepository products)
 		{
 			this.repo = repo;
 			this.products = products;
-			this.cookie = new CookieSession();
+			this.login = new LoginManager(repo);
 		}
 
 		public ActionResult Index()
 		{
-			var actualCookie = cookie.GetCookie();
-			if (actualCookie != null)
+			if (login.IsLoggedIn())
 			{
-				var userId = new Guid(actualCookie["Owner"]);
-				var user = repo.FindBy(userId);
-				ViewBag.UserName = user.Name;
+				ViewBag.UserName = ManagerContext.Session.OwnerName;
 				return View("Home");
 			}
 			return View(repo.FindAll().ToList());
@@ -45,35 +43,20 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 
 		public ActionResult LoginUser(Guid id)
 		{
-			var user = repo.FindBy(id);
-			if (user == null)
-			{
-				//TODO: Define error that will be displayed
-				return HttpNotFound();
-			}
-			return LoginUser(user);
+			login.Login(id);
+			ViewBag.Username = ManagerContext.Session.OwnerName;
+			return View("Home");
 		}
 
 		public ActionResult Logout()
 		{
-			cookie.DeleteCookie();
+			login.Logout();
 			return RedirectToAction("Index", "Home");
 		}
 
 		public ActionResult Store()
 		{
 			return RedirectToAction("Index", "Store");
-		}
-
-		private ActionResult LoginUser(User user)
-		{
-			if (ModelState.IsValid)
-			{
-				Debug.Assert(cookie != null);
-				cookie.Initialize(user.Id);
-			}
-			ViewBag.Username = user.Name;
-			return View("Home");
 		}
 	}
 }
