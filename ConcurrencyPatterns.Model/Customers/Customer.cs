@@ -10,21 +10,25 @@ using ConcurrencyPatterns.Model.Core;
 
 namespace ConcurrencyPatterns.Model.Customers
 {
+	using ConcurrencyPatterns.Infrastructure.Context;
 	using Version = ConcurrencyPatterns.Model.Core.Version;
 
 	public sealed class Customer : Entity, IAggregateRoot
 	{
-		public static Customer Create(string name, string createdBy)
+		public static Customer Create(string name)
 		{
-			var customer = new Customer(Guid.NewGuid(), name);
+			var createdBy = CurrentContext.Session.OwnerName;
+			var customer = new Customer(Guid.NewGuid(), createdBy);
 			customer.SetSystemFields(Version.Create(createdBy), DateTime.UtcNow, createdBy);
 			customer.isNew = true;
 			return customer;
 		}
 
-		public static Customer Activate(Guid id, string name)
+		public static Customer Activate(Guid id, string name, bool update = false)
 		{
-			return new Customer(id, name);
+			var customer = new Customer(id, name);
+			if (update) customer.SetDirty();
+			return customer;
 		}
 
 		private string name;
@@ -54,9 +58,9 @@ namespace ConcurrencyPatterns.Model.Customers
 			return this.addresses;
 		}
 
-		public Address AddAddress(string line1, string line2, string phone, string createdBy)
+		public Address AddAddress(string line1, string line2, string phone)
 		{
-			var address = Address.Create(this, this.Version, line1, line2, phone, createdBy);
+			var address = Address.Create(this, this.Version, line1, line2, phone);
 			this.addresses.Add(address);
 			this.modifications.Insert(address);
 			return address;

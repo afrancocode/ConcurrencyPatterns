@@ -95,7 +95,7 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 
 		private void CoreCreate(ProductViewModel product)
 		{
-			var newProduct = Product.Create(product.Name, product.Description, product.Stock, UserName);
+			var newProduct = Product.Create(product.Name, product.Description, product.Stock);
 			try
 			{
 				products.Add(newProduct);
