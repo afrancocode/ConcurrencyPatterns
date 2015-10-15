@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ConcurrencyPatterns.Infrastructure.Context;
+using ConcurrencyPatterns.Infrastructure.Locking;
 using ConcurrencyPatterns.Model.Products;
 using ConcurrencyPatterns.Presentation.Web.Models;
 
@@ -71,6 +72,19 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 			return RedirectToAction("Index");
 		}
 
+		protected override void OnException(ExceptionContext filterContext)
+		{
+			if (filterContext.ExceptionHandled)
+				return;
+			Exception e = filterContext.Exception;
+			if (e is ConcurrencyException)
+			{
+				filterContext.ExceptionHandled = true;
+				filterContext.Result = View("Edit");
+			}
+			base.OnException(filterContext);
+		}
+
 		#region Private methods (possible refactoring needed)
 
 		private string UserName { get { return ManagerContext.Session.OwnerName; } }
@@ -119,6 +133,7 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 			var product = ActivateProduct(deletedProduct);
 			products.Remove(product);
 			this.ManagerContext.UnitOfWork.Commit();
+
 		}
 
 		#endregion

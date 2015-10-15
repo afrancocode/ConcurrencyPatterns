@@ -61,8 +61,8 @@ namespace ConcurrencyPatterns.Repository.Sql.Mapping
 
 		public override void Delete(EntityBase entity)
 		{
-			Mapper.Delete(entity);
 			GetVersion(entity).Delete();
+			Mapper.Delete(entity);
 		}
 	}
 

@@ -1,54 +1,67 @@
 ﻿@model ConcurrencyPatterns.Presentation.Web.Models.ProductViewModel
 
 @{
-    ViewBag.Title = "Edit";
+	ViewBag.Title = "Edit";
+}
+
+@if (TempData["concurrencyError"] != null)
+{
+	<script language="javascript" type="text/javascript">
+		$(document).ready(function () {
+			$("#dialog").dialog({
+				height: 250,
+				width: 400,
+				modal: true
+			});
+		});
+	</script>
 }
 
 <h2>Edit</h2>
 
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
-    
-    <div>
-        <h4>Product</h4>
-        <hr />
-        @Html.ValidationSummary(true)
-        <div>
-            @Html.LabelFor(model => model.Name)
-            <div>
-                @Html.EditorFor(model => model.Name)
-                @Html.ValidationMessageFor(model => model.Name)
-            </div>
-        </div>
+	@Html.AntiForgeryToken()
 
-        <div>
-            @Html.LabelFor(model => model.Description)
-            <div>
-                @Html.EditorFor(model => model.Description)
-                @Html.ValidationMessageFor(model => model.Description)
-            </div>
-        </div>
+	<div>
+		<h4>Product</h4>
+		<hr />
+		@Html.ValidationSummary(true)
+		<div>
+			@Html.LabelFor(model => model.Name)
+			<div>
+				@Html.EditorFor(model => model.Name)
+				@Html.ValidationMessageFor(model => model.Name)
+			</div>
+		</div>
 
-        <div>
-            @Html.LabelFor(model => model.Stock)
-            <div>
-                @Html.EditorFor(model => model.Stock)
-                @Html.ValidationMessageFor(model => model.Stock)
-            </div>
-        </div>
-        @Html.HiddenFor(model => model.Version.Id)
-        @Html.HiddenFor(model => model.Version.Value)
-        @Html.HiddenFor(model => model.Version.ModifiedBy)
-        @Html.HiddenFor(model => model.Version.Modified)
-        <div>
-            <div>
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
+		<div>
+			@Html.LabelFor(model => model.Description)
+			<div>
+				@Html.EditorFor(model => model.Description)
+				@Html.ValidationMessageFor(model => model.Description)
+			</div>
+		</div>
+
+		<div>
+			@Html.LabelFor(model => model.Stock)
+			<div>
+				@Html.EditorFor(model => model.Stock)
+				@Html.ValidationMessageFor(model => model.Stock)
+			</div>
+		</div>
+		@Html.HiddenFor(model => model.Version.Id)
+		@Html.HiddenFor(model => model.Version.Value)
+		@Html.HiddenFor(model => model.Version.ModifiedBy)
+		@Html.HiddenFor(model => model.Version.Modified)
+		<div>
+			<div>
+				<input type="submit" value="Save" class="btn btn-default" />
+			</div>
+		</div>
+	</div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+	@Html.ActionLink("Back to List", "Index")
 </div>

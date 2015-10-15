@@ -38,10 +38,10 @@
 
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
-		@Html.HiddenFor(model => model.Version.Id)
-		@Html.HiddenFor(model => model.Version.Value)
-		@Html.HiddenFor(model => model.Version.ModifiedBy)
-		@Html.HiddenFor(model => model.Version.Modified)
+        @Html.HiddenFor(model => model.Version.Id)
+        @Html.HiddenFor(model => model.Version.Value)
+        @Html.HiddenFor(model => model.Version.ModifiedBy)
+        @Html.HiddenFor(model => model.Version.Modified)
         <div>
             <input type="submit" value="Delete"/> |
             @Html.ActionLink("Back to List", "Index")

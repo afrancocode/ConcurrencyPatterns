@@ -1,0 +1,28 @@
+﻿<script>
+	$(document).ready(function () {
+		if (getCookie()) {
+			var x = getUser();
+			$('#userInfo').show();
+		}
+		else {
+			$('#userInfo').hide();
+		}
+	});
+
+	function getCookie() {
+		var value = "; " + document.cookie;
+		var values = value.split("; SessionInfo=");
+		if (values.length > 1) return values.pop().split(";").shift();
+	}
+
+	function getUser() {
+		var cookieValue = getCookie();
+		var userData = cookieValue.split("OwnerName=");
+		return userData.pop().split(",").shift();
+	}
+</script>
+
+<ul id="userInfo" class="header-right loginInfo">
+	<li> Hello <script>document.write(getUser())</script>!</li>
+	<li> @Html.ActionLink("Logout", "Logout", "Home")</li>
+</ul>

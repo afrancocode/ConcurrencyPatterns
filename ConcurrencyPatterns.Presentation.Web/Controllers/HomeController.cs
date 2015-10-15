@@ -31,7 +31,7 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 			if (login.IsLoggedIn())
 			{
 				ViewBag.UserName = ManagerContext.Session.OwnerName;
-				return View("Home");
+				return RedirectToAction("Index","store");
 			}
 			return View(repo.FindAll().ToList());
 		}
@@ -45,7 +45,7 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 		{
 			login.Login(id);
 			ViewBag.Username = ManagerContext.Session.OwnerName;
-			return View("Home");
+			return RedirectToAction("Index", "store");
 		}
 
 		public ActionResult Logout()

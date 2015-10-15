@@ -40,14 +40,13 @@ namespace ConcurrencyPatterns.Presentation.Web.Infrastructure
 				var userId = new Guid(cookie["Owner"]);
 				this.ownerId = userId;
 				this.ownerName = Users.FindBy(userId).Name;
-				//this.ownerId = new Guid(cookie["Owner"]);
 				this.initialized = true;
 			}
 		}
 
 		public void InitSession(Guid owner, string ownerName)
 		{
-			var cookie = CoreGetCookie() ?? CreateCookie(owner);
+			var cookie = CoreGetCookie() ?? CreateCookie(owner, ownerName);
 			Debug.Assert(cookie != null);
 			this.id = new Guid(cookie["Id"]);
 			this.ownerId = new Guid(cookie["Owner"]);
@@ -80,12 +79,13 @@ namespace ConcurrencyPatterns.Presentation.Web.Infrastructure
 			return null;
 		}
 
-		private HttpCookie CreateCookie(Guid owner)
+		private HttpCookie CreateCookie(Guid owner, string ownerName)
 		{
 			var cookie = new HttpCookie("SessionInfo");
 			cookie.Values.Add("Id", Guid.NewGuid().ToString());
 			cookie.Values.Add("Owner", owner.ToString());
-			cookie.Expires = DateTime.Now.AddHours(1); // Temporal date
+			cookie.Values.Add("OwnerName", ownerName);
+			cookie.Expires = DateTime.Now.AddDays(1); // Temporal date
 			HttpContext.Current.Response.AppendCookie(cookie);
 			return cookie;
 		}

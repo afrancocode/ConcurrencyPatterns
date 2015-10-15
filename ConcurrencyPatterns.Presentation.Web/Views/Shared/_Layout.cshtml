@@ -4,30 +4,20 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>@ViewBag.Title - Concurrency Project</title>
-	<link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
-	@*<link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />*@
-	@*<script src="~/Scripts/modernizr-2.6.2.js"></script>*@
-	<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-	@*<script src="~/Scripts/bootstrap.min.js"></script>*@
-
+	@Styles.Render("~/Content/css")
+	@Scripts.Render("~/bundles/jquery")
+	
 	<script>
 		$(document).ready(function () {
-			if (cookieExists()) {
-				$('#logout').show();
-			}
-			else {
-				$('#logout').hide();
-			}
-
-			function cookieExists() {
-				var name = "SessionInfo" + "=";
-				var allCookies = document.cookie.split(';');
-				for (var i = 0; i < allCookies.length; i++) {
-					var c = allCookies[i];
-					while (c.charAt(0) == ' ') c = c.substring(1);
-					if(c.indexOf(name) == 0) return true;
-				}
-				return false;
+			@if (TempData["concurrencyError"] != null)
+			{
+				<text>
+					$("#dialog").dialog({
+						height: 250,
+						width: 400,
+						modal: true
+					});
+				</text>
 			}
 		});
 	</script>
@@ -35,11 +25,9 @@
 </head>
 
 <body>
-	<div id="header">
-		<h1><a id="title" href="@Url.Action("Index","Home")">Concurrency Prototype</a></h1>
-		<ul id="logout" class="nav navbar-nav">
-			<li> @Html.ActionLink("Logout", "Logout", "Home")</li>
-		</ul>
+	<div class="header">
+		<h1><a class="header-title header-left" href="@Url.Action("Index","Home")">Concurrency Prototype</a></h1>
+		@Html.Partial("_LoginPartial")
 	</div>
 
 	<div class="container body-content">
@@ -50,6 +38,11 @@
 		</footer>
 	</div>
 
-	
+	<div id="dialog" title="Concurrency Error" style="display:none">
+		<p>You cannot modify the specified product because someone else modified before your changes.</p>
+		<br />
+		@Html.ActionLink("Back to List", "Index")
+	</div>
+
 </body>
 </html>
