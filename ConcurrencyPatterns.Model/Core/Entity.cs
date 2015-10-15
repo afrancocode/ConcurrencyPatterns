@@ -6,11 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 using ConcurrencyPatterns.Infrastructure.Domain;
+using ConcurrencyPatterns.Infrastructure.Context;
 
 namespace ConcurrencyPatterns.Model.Core
 {
 	public abstract class Entity : EntityBase
 	{
+		internal static IManagerContext CurrentContext { get { return ApplicationContextHolder.Instance.Context; } }
+
 		private DateTime modified;
 		private string modifiedBy;
 		private Version version;
@@ -21,6 +24,8 @@ namespace ConcurrencyPatterns.Model.Core
 		{
 			this.id = id;
 		}
+
+		protected IManagerContext Context { get { return Entity.CurrentContext; } }
 
 		public Version Version { get { return this.version; } }
 		public DateTime Modified { get { return this.modified; } }

@@ -13,8 +13,9 @@ namespace ConcurrencyPatterns.Model.Customers
 
 	public sealed class Address : Entity
 	{
-		internal static Address Create(Customer customer, Version version, string line1, string line2, string phone, string createdBy)
+		internal static Address Create(Customer customer, Version version, string line1, string line2, string phone)
 		{
+			var createdBy = CurrentContext.Session.OwnerName;
 			var address = new Address(Guid.NewGuid(), customer, line1, line2, phone);
 			address.SetSystemFields(version, DateTime.UtcNow, createdBy);
 			address.isNew = true;

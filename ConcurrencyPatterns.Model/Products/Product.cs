@@ -14,10 +14,11 @@ namespace ConcurrencyPatterns.Model.Products
 
 	public sealed class Product : Entity, IAggregateRoot
 	{
-		public static Product Create(string name, string description, int stock, string modifiedBy)
+		public static Product Create(string name, string description, int stock)
 		{
+			var createdBy = CurrentContext.Session.OwnerName;
 			var product = new Product(Guid.NewGuid(), name, description, stock);
-			product.SetSystemFields(Version.Create(modifiedBy), DateTime.UtcNow, modifiedBy);
+			product.SetSystemFields(Version.Create(createdBy), DateTime.UtcNow, createdBy);
 			product.isNew = true;
 			return product;
 		}
