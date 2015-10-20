@@ -6,13 +6,14 @@
 	<title>@ViewBag.Title - Concurrency Project</title>
 	@Styles.Render("~/Content/css")
 	@Scripts.Render("~/bundles/jquery")
-	
+	<script src="/Scripts/uihandling.js"></script>
+
 	<script>
 		$(document).ready(function () {
 			@if (TempData["concurrencyError"] != null)
 			{
 				<text>
-					$("#dialog").dialog({
+					$("#dialogError").dialog({
 						height: 250,
 						width: 400,
 						modal: true
@@ -29,16 +30,20 @@
 		<h1><a class="header-title header-left" href="@Url.Action("Index","Home")">Concurrency Prototype</a></h1>
 		@Html.Partial("_LoginPartial")
 	</div>
-
-	<div class="container body-content">
-		@RenderBody()
-		<hr />
+	<div class="body-content">
+		<div class="leftMenu">
+			@Html.Partial("_LeftMenu")
+		</div>
+		<div class="content">
+			@RenderBody()
+		</div>
+	</div>
+	<div class="footer">
 		<footer>
 			<p>&copy; @DateTime.Now.Year - Code Services Co.</p>
 		</footer>
 	</div>
-
-	<div id="dialog" title="Concurrency Error" style="display:none">
+	<div id="dialogError" title="Concurrency Error" style="display:none">
 		<p>You cannot modify the specified product because someone else modified before your changes.</p>
 		<br />
 		@Html.ActionLink("Back to List", "Index")

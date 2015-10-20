@@ -1,52 +1,48 @@
 ﻿@model ConcurrencyPatterns.Presentation.Web.Models.ProductViewModel
 
 @{
-    ViewBag.Title = "Create";
+	ViewBag.Title = "Create";
 }
 
 <h2>Create Product</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
-    
-    <div >
-        <h4>Product</h4>
-        <hr />
-        @Html.ValidationSummary(true)
+	@Html.AntiForgeryToken()
 
-        <div>
-            @Html.LabelFor(model => model.Name)
-            <div>
-                @Html.EditorFor(model => model.Name)
-                @Html.ValidationMessageFor(model => model.Name)
-            </div>
-        </div>
+	<h4>Product</h4>
+	<hr />
+	@Html.ValidationSummary(true)
 
-        <div>
-            @Html.LabelFor(model => model.Description)
-            <div>
-                @Html.EditorFor(model => model.Description)
-                @Html.ValidationMessageFor(model => model.Description)
-            </div>
-        </div>
+	<div>
+		@Html.LabelFor(model => model.Name)
+		<div>
+			@Html.EditorFor(model => model.Name)
+			@Html.ValidationMessageFor(model => model.Name)
+		</div>
+	</div>
 
-        <div>
-            @Html.LabelFor(model => model.Stock)
-            <div>
-                @Html.EditorFor(model => model.Stock)
-                @Html.ValidationMessageFor(model => model.Stock)
-            </div>
-        </div>
+	<div>
+		@Html.LabelFor(model => model.Description)
+		<div>
+			@Html.EditorFor(model => model.Description)
+			@Html.ValidationMessageFor(model => model.Description)
+		</div>
+	</div>
 
-        <div>
-            <div>
-                <input type="submit" value="Create" />
-            </div>
-        </div>
-    </div>
+	<div>
+		@Html.LabelFor(model => model.Stock)
+		<div>
+			@Html.EditorFor(model => model.Stock)
+			@Html.ValidationMessageFor(model => model.Stock)
+		</div>
+	</div>
+
+	<div>
+		<input type="submit" value="Create" />
+	</div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+	@Html.ActionLink("Back to List", "Index")
 </div>

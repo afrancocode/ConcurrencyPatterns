@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using ConcurrencyPatterns.Infrastructure.Context;
 
 namespace ConcurrencyPatterns.Presentation.Web.Controllers
 {
@@ -22,5 +23,12 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 		}
 	}
 
-	public class BaseController : Controller { }
+	public class BaseController : Controller 
+	{
+		internal IManagerContext ManagerContext { get { return ApplicationContextHolder.Instance.Context; } }
+		public BaseController()
+		{
+			ManagerContext.Session.Initialize();
+		}
+	}
 }

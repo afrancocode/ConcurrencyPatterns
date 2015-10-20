@@ -1,0 +1,22 @@
+﻿@model IEnumerable<ConcurrencyPatterns.Model.Customers.Customer>
+@{
+	ViewBag.Title = "Customers";
+}
+
+<h2>Customers</h2>
+
+<p>
+	@Html.ActionLink("New Customer", "Create")
+</p>
+<table class="table">
+	<tr>
+		<th>Name</th>
+	</tr>
+	
+	@foreach (var item in Model)
+	{
+		<tr>
+			<td>@Html.DisplayFor(modelItem => item.Name)</td>
+		</tr>
+	}
+</table>

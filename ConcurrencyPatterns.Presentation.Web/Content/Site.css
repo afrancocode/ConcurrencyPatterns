@@ -3,6 +3,19 @@
 	color: black;
 }
 
+.body-content{
+	margin:0 10px 0 0;
+	padding:5px;
+	min-height: 150px;
+}
+
+.content{
+	margin:0 0 0 160px;
+	border:none;
+	height:100%;
+	position:relative;
+}
+
 h1 {
 	font: Georgia, serif;
 	color: #6a869d;
@@ -46,10 +59,10 @@ fieldset {
 	padding-left: 12px;
 }
 
-	fieldset label {
-		display: block;
-		padding: 4px;
-	}
+fieldset label {
+	display: block;
+	padding: 4px;
+}
 
 input[type=" text"], input[type="password"] {
 	width: 300px;
@@ -78,6 +91,7 @@ table {
 		padding: 3px;
 	}
 
+/* header*/
 .header {
 	height: 40px;
 	margin-right: 15px;
@@ -117,4 +131,22 @@ table {
 .loginInfo li a {
 	color: black;
 	text-decoration: none;
+}
+
+/* Left menu*/
+
+.leftMenu{
+	border-right: 3px solid #6a869d;
+	position:static;
+	float:left;
+	width:150px;
+	height:100%;
+	padding:0;
+	font-size: 20px;
+}
+
+.leftMenuItems{
+	width:15%;
+	list-style: none;
+	margin-left:0px;
 }

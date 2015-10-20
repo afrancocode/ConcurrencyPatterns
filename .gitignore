@@ -200,3 +200,7 @@ ConcurrencyPatterns.Presentation.Web/Infrastructure/DataConnectionInfo.cs
 ConcurrencyPatterns.Presentation.Web/Infrastructure/DataConnectionInfo.cs
 ConcurrencyPatterns.Presentation.Web/Scripts/jquery.fancybox-1.3.4.pack.js
 ConcurrencyPatterns.Repository.Sql/Mapping/OptimisticLockingMapper.cs
+ConcurrencyPatterns.Presentation.Web/Global.asax.cs
+ConcurrencyPatterns.Presentation.Web/Global.asax.cs
+ConcurrencyPatterns.Presentation.Web/Infrastructure/DataConnectionInfo.cs
+ConcurrencyPatterns.Presentation.Web/Scripts/uihandling.js

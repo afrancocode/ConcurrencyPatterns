@@ -14,13 +14,10 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 	public class StoreController : BaseController
 	{
 		private IProductRepository products;
-		private IManagerContext ManagerContext { get { return ApplicationContextHolder.Instance.Context; } }
 
 		public StoreController(IProductRepository products)
 		{
 			this.products = products;
-			//TODO: Check if this is correct
-			ManagerContext.Session.Initialize();
 		}
 		//
 		// GET: /Store/
@@ -80,6 +77,7 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 			if (e is ConcurrencyException)
 			{
 				filterContext.ExceptionHandled = true;
+				filterContext.Controller.TempData["concurrencyError"] = true;
 				filterContext.Result = View("Edit");
 			}
 			base.OnException(filterContext);

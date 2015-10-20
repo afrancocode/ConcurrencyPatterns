@@ -18,7 +18,7 @@ namespace ConcurrencyPatterns.Model.Customers
 		public static Customer Create(string name)
 		{
 			var createdBy = CurrentContext.Session.OwnerName;
-			var customer = new Customer(Guid.NewGuid(), createdBy);
+			var customer = new Customer(Guid.NewGuid(), name);
 			customer.SetSystemFields(Version.Create(createdBy), DateTime.UtcNow, createdBy);
 			customer.isNew = true;
 			return customer;

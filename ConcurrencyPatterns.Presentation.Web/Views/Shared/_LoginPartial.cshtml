@@ -1,7 +1,6 @@
 ﻿<script>
 	$(document).ready(function () {
 		if (getCookie()) {
-			var x = getUser();
 			$('#userInfo').show();
 		}
 		else {
@@ -17,6 +16,7 @@
 
 	function getUser() {
 		var cookieValue = getCookie();
+		if (cookieValue == null) return;
 		var userData = cookieValue.split("OwnerName=");
 		return userData.pop().split(",").shift();
 	}
