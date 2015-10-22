@@ -204,3 +204,4 @@ ConcurrencyPatterns.Presentation.Web/Global.asax.cs
 ConcurrencyPatterns.Presentation.Web/Global.asax.cs
 ConcurrencyPatterns.Presentation.Web/Infrastructure/DataConnectionInfo.cs
 ConcurrencyPatterns.Presentation.Web/Scripts/uihandling.js
+ConcurrencyPatterns.Presentation.Web/Global.asax.cs

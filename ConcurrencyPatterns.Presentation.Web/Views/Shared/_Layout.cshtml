@@ -6,21 +6,20 @@
 	<title>@ViewBag.Title - Concurrency Project</title>
 	@Styles.Render("~/Content/css")
 	@Scripts.Render("~/bundles/jquery")
+	<link href="~/Content/themes/smoothness/jquery-ui.css" rel="stylesheet" />
 	<script src="/Scripts/uihandling.js"></script>
 
 	<script>
-		$(document).ready(function () {
-			@if (TempData["concurrencyError"] != null)
+		@if (TempData["concurrencyError"] != null)
 			{
 				<text>
-					$("#dialogError").dialog({
-						height: 250,
-						width: 400,
-						modal: true
+					$(document).ready(function () {
+						$("#dialogError").dialog({
+							modal: true
+						});
 					});
 				</text>
-			}
-		});
+			}		
 	</script>
 
 </head>

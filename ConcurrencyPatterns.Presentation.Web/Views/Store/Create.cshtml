@@ -4,14 +4,10 @@
 	ViewBag.Title = "Create";
 }
 
-<h2>Create Product</h2>
-
 @using (Html.BeginForm())
 {
 	@Html.AntiForgeryToken()
 
-	<h4>Product</h4>
-	<hr />
 	@Html.ValidationSummary(true)
 
 	<div>
@@ -39,10 +35,7 @@
 	</div>
 
 	<div>
+		<br />
 		<input type="submit" value="Create" />
 	</div>
 }
-
-<div>
-	@Html.ActionLink("Back to List", "Index")
-</div>

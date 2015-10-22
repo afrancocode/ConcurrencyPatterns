@@ -33,9 +33,9 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 			return View(product);
 		}
 
-		public ActionResult Edit(Guid id)
+		public PartialViewResult Edit(Guid id)
 		{
-			return View(GetProductViewModel(id));
+			return PartialView(GetProductViewModel(id));
 		}
 
 		[HttpPost]
@@ -45,9 +45,9 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 			return RedirectToAction("Index");
 		}
 
-		public ActionResult Create()
+		public PartialViewResult Create()
 		{
-			return View();
+			return PartialView();
 		}
 
 		[HttpPost]
@@ -57,9 +57,9 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 			return RedirectToAction("Index");
 		}
 
-		public ActionResult Delete(Guid id)
+		public PartialViewResult Delete(Guid id)
 		{
-			return View(GetProductViewModel(id));
+			return PartialView(GetProductViewModel(id));
 		}
 
 		[HttpPost]
