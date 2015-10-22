@@ -1,0 +1,21 @@
+﻿@model ConcurrencyPatterns.Presentation.Web.Models.CustomerViewModel
+
+@{
+	ViewBag.Title = "Delete";
+}
+
+<h3>Are you sure you want to delete this Customer?</h3>
+<div>
+	@Html.DisplayFor(model => model.Name)
+	<br /><br />
+	@using (Html.BeginForm())
+	{
+		@Html.HiddenFor(model => model.Version.Id)
+		@Html.HiddenFor(model => model.Version.Value)
+		@Html.HiddenFor(model => model.Version.ModifiedBy)
+		@Html.HiddenFor(model => model.Version.Modified)
+		<div>
+			<input type="submit" value="Delete" />
+		</div>
+	}
+</div>

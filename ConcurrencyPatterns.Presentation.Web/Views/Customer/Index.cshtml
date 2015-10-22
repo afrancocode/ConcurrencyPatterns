@@ -4,19 +4,23 @@
 }
 
 <h2>Customers</h2>
-
+<div id="dialog-form"></div>
 <p>
-	@Html.ActionLink("New Customer", "Create")
+	@Html.ActionLink("New Customer", "Create", null, new { @class = "dialog", @title = "Create Customer" })
 </p>
-<table class="table">
+<table class="table" style="width:60%;">
 	<tr>
 		<th>Name</th>
+		<th></th>
 	</tr>
-	
+
 	@foreach (var item in Model)
 	{
 		<tr>
 			<td>@Html.DisplayFor(modelItem => item.Name)</td>
+			<td>@Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "dialog", @title = "Edit Customer" }) |
+			@Html.ActionLink("Details", "Details", new { id = item.Id }) |
+			@Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "dialog", @title = "Delete Customer" })</td>
 		</tr>
 	}
 </table>

@@ -1,17 +1,11 @@
 ﻿@model ConcurrencyPatterns.Presentation.Web.Models.CustomerViewModel
 
 @{
-    ViewBag.Title = "Create";
+	ViewBag.Title = "Create";
 }
-
-<h2>Create Customer</h2>
-
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
 	@Html.AntiForgeryToken()
-
-	<h4>Customer</h4>
-	<hr />
 	@Html.ValidationSummary(true)
 
 	<div>
@@ -21,12 +15,8 @@
 			@Html.ValidationMessageFor(model => model.Name)
 		</div>
 	</div>
-
+	<br />
 	<div class="col-md-offset-2 col-md-10">
 		<input type="submit" value="Create" class="btn btn-default" />
 	</div>
 }
-
-<div>
-	@Html.ActionLink("Back to List", "Index")
-</div>

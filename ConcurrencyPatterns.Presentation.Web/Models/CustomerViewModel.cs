@@ -9,6 +9,7 @@ namespace ConcurrencyPatterns.Presentation.Web.Models
 	{
 		public Guid Id { get; set; }
 		public string Name { get; set; }
+		public VersionViewModel Version { get; set; }
 
 		public CustomerViewModel() : this(Guid.Empty, string.Empty) { }
 

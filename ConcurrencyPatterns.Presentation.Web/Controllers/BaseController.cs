@@ -30,5 +30,7 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 		{
 			ManagerContext.Session.Initialize();
 		}
+
+		internal string UserName { get { return ManagerContext.Session.OwnerName; } }
 	}
 }

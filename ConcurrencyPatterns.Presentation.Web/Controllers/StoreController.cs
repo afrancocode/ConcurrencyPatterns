@@ -85,8 +85,6 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 
 		#region Private methods (possible refactoring needed)
 
-		private string UserName { get { return ManagerContext.Session.OwnerName; } }
-
 		private ProductViewModel GetProductViewModel(Guid id)
 		{
 			var product = products.FindBy(id);
@@ -96,27 +94,20 @@ namespace ConcurrencyPatterns.Presentation.Web.Controllers
 			return productView;
 		}
 
-		private Product ActivateProduct(ProductViewModel product)
+		private Product ActivateProduct(ProductViewModel productView)
 		{
-			var productModel = Product.Activate(product.Id, product.Name, product.Description, product.Stock, true);
-			var version = ConcurrencyPatterns.Model.Core.Version.Activate(product.Version.Id, product.Version.Value, product.Version.ModifiedBy, product.Version.Modified);
+			var productModel = Product.Activate(productView.Id, productView.Name, productView.Description, productView.Stock, true);
+			var version = ConcurrencyPatterns.Model.Core.Version.Activate(productView.Version.Id, productView.Version.Value, productView.Version.ModifiedBy, productView.Version.Modified);
 			//TODO: Date and name will change
 			productModel.SetSystemFields(version, DateTime.Now, UserName);
 			return productModel;
 		}
 
-		private void CoreCreate(ProductViewModel product)
+		private void CoreCreate(ProductViewModel productView)
 		{
-			var newProduct = Product.Create(product.Name, product.Description, product.Stock);
-			try
-			{
-				products.Add(newProduct);
-				this.ManagerContext.UnitOfWork.Commit();
-			}
-			catch
-			{
-				throw;
-			}
+			var newProduct = Product.Create(productView.Name, productView.Description, productView.Stock);
+			products.Add(newProduct);
+			this.ManagerContext.UnitOfWork.Commit();
 		}
 
 		private void CoreSave(ProductViewModel editedProduct)
